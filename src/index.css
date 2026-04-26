@@ -50,8 +50,8 @@
 
 @layer utilities {
   .glass-container {
-    -webkit-backdrop-filter: blur(24px);
-    @apply bg-white/10 backdrop-blur-2xl border border-white/40 shadow-[0_32px_64px_-12px_rgba(123,120,168,0.15)];
+    -webkit-backdrop-filter: blur(48px);
+    @apply bg-white/10 backdrop-blur-[48px] border border-white/40 shadow-[0_32px_64px_-12px_rgba(123,120,168,0.12)];
   }
   
   .bg-layer {
@@ -59,9 +59,10 @@
   }
   
   .bg-watermark {
-    @apply absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-serif font-light tracking-[0.05em] text-[rgba(123,120,168,0.3)] select-none whitespace-nowrap transition-all duration-700 pointer-events-none;
+    @apply absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-serif font-light tracking-[0.05em] text-[#7B78A8]/20 select-none whitespace-nowrap transition-all duration-700 pointer-events-none;
     font-size: clamp(8rem, 25vw, 24rem);
-    filter: blur(0.5px);
+    filter: blur(1.5px);
+    mix-blend-mode: color-burn;
   }
 
   .corner-ornament {
