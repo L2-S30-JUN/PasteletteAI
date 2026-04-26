@@ -4,12 +4,11 @@ let genAI: GoogleGenAI | null = null;
 
 function getGenAI() {
   if (!genAI) {
-    // In AI Studio, process.env.GEMINI_API_KEY is automatically provided.
-    // For external deployments like Vercel, we can also check for VITE_ prefix.
-    const apiKey = ((import.meta as any).env.VITE_GEMINI_API_KEY as string) || (process.env.GEMINI_API_KEY as string);
+    // According to gemini-api skill, we should use process.env.GEMINI_API_KEY directly for React (Vite)
+    const apiKey = process.env.GEMINI_API_KEY;
     
-    if (!apiKey || apiKey === "undefined") {
-      throw new Error("GEMINI_API_KEY is missing. If you're on Vercel, please add VITE_GEMINI_API_KEY to your environment variables.");
+    if (!apiKey) {
+      throw new Error("GEMINI_API_KEY is missing. Please ensure it is set in the environment.");
     }
     genAI = new GoogleGenAI({ apiKey });
   }
@@ -31,7 +30,7 @@ export interface PaletteResponse {
 export async function generatePalette(word: string): Promise<PaletteResponse> {
   const ai = getGenAI();
   const result = await ai.models.generateContent({
-    model: "gemini-1.5-flash", // Using stable 1.5-flash for reliability
+    model: "gemini-3-flash-preview",
     contents: `Generate an expressive color palette inspired by the word: "${word}". 
     The palette should have exactly 5 colors. 
     The colors should accurately reflect the mood, temperature, and semantic meaning associated with the word. Use appropriate saturation and brightness that best represent the concept.
