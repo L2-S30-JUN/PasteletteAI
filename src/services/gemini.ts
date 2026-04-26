@@ -1,6 +1,13 @@
 import { GoogleGenAI, Type } from "@google/genai";
 
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || "" });
+// Ensure API key is present, otherwise provide a meaningful error at runtime
+function getAI() {
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) {
+    throw new Error("GEMINI_API_KEY is missing. Please set it in your environment variables.");
+  }
+  return new GoogleGenAI({ apiKey });
+}
 
 export interface ColorInfo {
   hex: string;
@@ -15,6 +22,7 @@ export interface PaletteResponse {
 }
 
 export async function generatePalette(word: string): Promise<PaletteResponse> {
+  const ai = getAI();
   const response = await ai.models.generateContent({
     model: "gemini-3-flash-preview",
     contents: `Generate an expressive color palette inspired by the word: "${word}". 

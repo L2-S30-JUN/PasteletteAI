@@ -50,8 +50,8 @@
 
 @layer utilities {
   .glass-container {
-    @apply bg-white/15 backdrop-blur-2xl border border-white/25 shadow-[0_32px_64px_-12px_rgba(123,120,168,0.08)];
-    -webkit-backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(48px);
+    @apply bg-white/10 backdrop-blur-[48px] border border-white/20 shadow-[0_32px_64px_-12px_rgba(123,120,168,0.12)];
   }
   
   .bg-layer {
