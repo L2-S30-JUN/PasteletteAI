@@ -1,0 +1,130 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@200;300;400&family=Noto+Serif+KR:wght@300;400&family=Noto+Sans+KR:wght@300;400&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Jost", "Noto Sans KR", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Cormorant Garamond", "Noto Serif KR", serif;
+  
+  --color-text-primary: #7B78A8;
+  --color-text-secondary: #9D9BBF;
+  --color-text-muted: #B8B5D0;
+  --color-text-label: #6B6898;
+  
+  --color-accent-primary: #A8A4D4;
+  --color-accent-hover: #8F8BC0;
+  
+  --color-bg-frosted: rgba(240, 237, 248, 0.5); /* Tinted with lavender */
+  
+  --color-deco-snowflake: rgba(160, 155, 205, 0.7);
+  --color-deco-sparkle: rgba(170, 165, 215, 0.8);
+  --color-deco-cross: rgba(175, 170, 215, 0.5);
+
+  --animate-float: float 5s ease-in-out infinite;
+  --animate-rotate-slow: rotate-slow 20s linear infinite;
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.7; }
+    50% { transform: translateY(-15px) rotate(5deg); opacity: 0.9; }
+  }
+
+  @keyframes rotate-slow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+}
+
+@layer base {
+  body {
+    @apply bg-[#F0EDF8] text-[#7B78A8] antialiased overflow-hidden selection:bg-[#A8A4D4]/20;
+    background-image: 
+      radial-gradient(ellipse at 0% 0%, rgba(255, 209, 220, 0.6) 0%, transparent 70%),
+      radial-gradient(ellipse at 100% 100%, rgba(174, 198, 207, 0.5) 0%, transparent 70%),
+      radial-gradient(ellipse at 50% 50%, rgba(255, 249, 196, 0.4) 0%, transparent 60%),
+      linear-gradient(135deg, #FDFCF8 0%, #F0EDF8 40%, #E8EEF8 70%, #DDE8F5 100%);
+    background-attachment: fixed;
+    background-size: cover;
+    height: 100vh;
+    width: 100vw;
+  }
+}
+
+@layer utilities {
+  .glass-container {
+    @apply bg-white/15 backdrop-blur-2xl border border-white/25 shadow-[0_32px_64px_-12px_rgba(123,120,168,0.08)];
+    -webkit-backdrop-filter: blur(40px);
+  }
+  
+  .bg-layer {
+    @apply fixed inset-0 z-0 pointer-events-none overflow-hidden;
+  }
+  
+  .bg-watermark {
+    @apply absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-serif font-light tracking-[0.2em] text-[rgba(123,120,168,0.18)] select-none whitespace-nowrap transition-all duration-700 pointer-events-none;
+    font-size: clamp(8rem, 25vw, 22rem);
+  }
+
+  .corner-ornament {
+    @apply absolute w-10 h-10 pointer-events-none;
+  }
+  .corner-ornament::before,
+  .corner-ornament::after {
+    @apply content-[''] absolute bg-[rgba(180,175,215,0.5)];
+  }
+  .corner-ornament::before { width: 100%; height: 1px; top: 0; left: 0; }
+  .corner-ornament::after { width: 1px; height: 100%; top: 0; left: 0; }
+
+  .corner-ornament--tl { @apply top-4 left-4; }
+  .corner-ornament--tr { @apply top-4 right-4 rotate-90; }
+  .corner-ornament--bl { @apply bottom-4 left-4 -rotate-90; }
+  .corner-ornament--br { @apply bottom-4 right-4 rotate-180; }
+  
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-[#7B78A8]/10 rounded-full hover:bg-[#7B78A8]/20 transition-colors;
+  }
+
+  .deco-ribbon {
+    @apply absolute w-full pointer-events-none;
+  }
+  .deco-ribbon--blue { top: 0; left: 0; height: 50%; opacity: 0.5; }
+  .deco-ribbon--pink { bottom: 0; left: 0; height: 50%; opacity: 0.4; }
+
+  .deco-snowflake {
+    @apply absolute text-[rgba(160,155,205,0.55)] pointer-events-none animate-float select-none;
+  }
+  .deco-snowflake--lg { @apply w-14 h-14; }
+  .deco-snowflake--md { @apply w-10 h-10; }
+  .deco-snowflake--sm { @apply w-6 h-6; }
+  
+  .deco-sparkle {
+    @apply absolute text-[rgba(170,165,215,0.65)] pointer-events-none animate-pulse select-none;
+  }
+  .deco-sparkle--lg { @apply w-7 h-7; }
+  .deco-sparkle--md { @apply w-5 h-5; }
+  .deco-sparkle--sm { @apply w-3 h-3; }
+  .deco-sparkle--xs { @apply w-2 h-2; }
+
+  .deco-cross {
+    @apply absolute w-3 h-3 pointer-events-none opacity-40;
+    background: linear-gradient(90deg, #A8A4D4 1px, transparent 1px) 50% 50% / 100% 1px no-repeat,
+                linear-gradient(0deg, #A8A4D4 1px, transparent 1px) 50% 50% / 1px 100% no-repeat;
+  }
+
+  .ribbon-path {
+    stroke-dasharray: 2000;
+    stroke-dashoffset: 2000;
+    animation: ribbon-draw 4s ease-out forwards;
+  }
+}
+
+@keyframes ribbon-draw {
+  to { stroke-dashoffset: 0; }
+}
+
+
+
