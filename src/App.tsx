@@ -164,6 +164,16 @@ export default function App() {
                 </button>
               ))}
             </div>
+
+            {error && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="mt-6 rounded-lg border border-red-200/30 bg-red-50/10 p-4 text-center backdrop-blur-sm"
+              >
+                <p className="text-sm font-serif italic text-red-400">{error}</p>
+              </motion.div>
+            )}
           </section>
 
           {/* Results Area */}
