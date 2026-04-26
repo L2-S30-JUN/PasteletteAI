@@ -1,13 +1,7 @@
 import { GoogleGenAI, Type } from "@google/genai";
 
-// Ensure API key is present, otherwise provide a meaningful error at runtime
-function getAI() {
-  const apiKey = process.env.GEMINI_API_KEY;
-  if (!apiKey) {
-    throw new Error("GEMINI_API_KEY is missing. Please set it in your environment variables.");
-  }
-  return new GoogleGenAI({ apiKey });
-}
+// Initialization with platform-provided key
+const genAI = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY as string });
 
 export interface ColorInfo {
   hex: string;
@@ -22,18 +16,45 @@ export interface PaletteResponse {
 }
 
 export async function generatePalette(word: string): Promise<PaletteResponse> {
-  const response = await fetch("/api/palette", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
+  const result = await genAI.models.generateContent({
+    model: "gemini-3-flash-preview",
+    contents: `Generate an expressive color palette inspired by the word: "${word}". 
+    The palette should have exactly 5 colors. 
+    The colors should accurately reflect the mood, temperature, and semantic meaning associated with the word. Use appropriate saturation and brightness that best represent the concept.
+    Provide a theme name, a brief explanation of why these colors match the word, and for each color, provide its hex code, a descriptive name, and a short reason for its inclusion.`,
+    config: {
+      responseMimeType: "application/json",
+      responseSchema: {
+        type: Type.OBJECT,
+        properties: {
+          theme: { type: Type.STRING },
+          explanation: { type: Type.STRING },
+          colors: {
+            type: Type.ARRAY,
+            items: {
+              type: Type.OBJECT,
+              properties: {
+                hex: { type: Type.STRING },
+                name: { type: Type.STRING },
+                description: { type: Type.STRING },
+              },
+              required: ["hex", "name", "description"],
+            },
+          },
+        },
+        required: ["theme", "explanation", "colors"],
+      },
     },
-    body: JSON.stringify({ word }),
   });
 
-  if (!response.ok) {
-    const errorData = await response.json().catch(() => ({}));
-    throw new Error(errorData.error || "Failed to generate palette");
+  try {
+    const text = result.text;
+    if (!text) {
+      throw new Error("Empty response from AI");
+    }
+    return JSON.parse(text);
+  } catch (error) {
+    console.error("Failed to parse palette response:", error);
+    throw new Error("Failed to generate a valid palette. Please try again.");
   }
-
-  return response.json();
 }
